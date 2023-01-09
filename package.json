@@ -1,0 +1,24 @@
+{
+  "name": "simpleticket",
+  "version": "1.0.0",
+  "description": "SimpleTicket is a simple ticket bot for discord",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HypedDomi/SimpleTicket.git"
+  },
+  "keywords": [],
+  "author": "Dominik <dominik.buettner1711@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HypedDomi/SimpleTicket/issues"
+  },
+  "homepage": "https://github.com/HypedDomi/SimpleTicket",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
+}

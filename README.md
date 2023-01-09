@@ -1,2 +1,2 @@
 # SimpleTicket
- SimpleTicket is a simple ticket bot for discord
+SimpleTicket is a simple ticket bot for discord
