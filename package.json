@@ -4,6 +4,8 @@
   "description": "SimpleTicket is a simple ticket bot for discord",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "start": "node ."
   },
   "repository": {
@@ -20,5 +22,10 @@
   "dependencies": {
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0"
   }
 }
