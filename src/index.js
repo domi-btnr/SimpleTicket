@@ -1,13 +1,14 @@
-const { Client, GatewayIntentBits, REST, Routes } = require("discord.js");
+import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import dotenv from "dotenv";
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-require("dotenv").config();
 
+dotenv.config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const TOKEN = process.env.TOKEN;
 
-const commands = require("./commands");
-const modals = require("./modals");
+import commands from "./commands/index.js";
+import modals from "./modals/index.js";
 
 const rest = new REST({ version: "10" }).setToken(TOKEN);
 (async () => {
@@ -23,25 +24,17 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 bot.on("ready", () => {
     console.log(`Logged in as ${bot.user.tag}`);
 });
+
 bot.on("interactionCreate", async interaction => {
-    if (interaction.isChatInputCommand()) {
-        const command = commands.find(cmd => cmd.name === interaction.commandName);
-        if (!command) return;
-        try {
-            command.callback(interaction);
-        } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
-        }
-    } else if (interaction.isModalSubmit()) {
-        const modal = modals.find(modal => modal.customId === interaction.customId);
-        if (!modal) return;
-        try {
-            modal.callback(interaction);
-        } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: "There was an error while executing this modal!", ephemeral: true });
-        }
+    if (!interaction.isChatInputCommand() && !interaction.isModalSubmit()) return;
+    const action = interaction.isChatInputCommand() ? commands.find(cmd => cmd.name === interaction.commandName) : modals.find(modal => modal.customId === interaction.customId);
+    if (!action) return;
+    try {
+        action.callback(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: "An error occured", ephemeral: true });
     }
 });
+
 bot.login(TOKEN);

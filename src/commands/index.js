@@ -1,7 +1,7 @@
-const source = require("./source");
-const createTicket = require("./createTicket");
+import createTicket from "./createTicket.js";
+import source from "./source.js";
 
-module.exports = [
-    source,
-    createTicket
+export default [
+    createTicket,
+    source
 ];

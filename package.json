@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "SimpleTicket is a simple ticket bot for discord",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

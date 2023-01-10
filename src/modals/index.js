@@ -1,5 +1,5 @@
-const createTicket = require("./createTicket");
+import createTicket from "./createTicket.js";
 
-module.exports = [
+export default [
     createTicket
 ];
