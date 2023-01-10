@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ModalBuilder, SlashCommandBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const command = new SlashCommandBuilder()
     .setName("create-ticket")
