@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import { Client, GatewayIntentBits, InteractionType, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -26,14 +26,26 @@ bot.on("ready", () => {
 });
 
 bot.on("interactionCreate", async interaction => {
-    if (!interaction.isChatInputCommand() && !interaction.isModalSubmit()) return;
-    const action = interaction.isChatInputCommand() ? commands.find(cmd => cmd.name === interaction.commandName) : modals.find(modal => modal.customId === interaction.customId);
-    if (!action) return;
-    try {
-        action.callback(interaction);
-    } catch (error) {
-        console.error(error);
-        await interaction.reply({ content: "An error occured", ephemeral: true });
+    if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
+        const cmd = commands.find(cmd => cmd.name === interaction.commandName);
+        if (cmd) await cmd.autocomplete(interaction);
+    } else {
+        let action = null;
+        switch (interaction.type) {
+            case InteractionType.ApplicationCommand:
+                action = commands.find(cmd => cmd.name === interaction.commandName);
+                break;
+            case InteractionType.ModalSubmit:
+                action = modals.find(modal => modal.customId === interaction.customId);
+                break;
+        }
+        if (!action) return;
+        try {
+            action.callback(interaction);
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ content: "An error occured", ephemeral: true });
+        }
     }
 });
 
