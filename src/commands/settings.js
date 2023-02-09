@@ -45,17 +45,18 @@ const autocomplete = async interaction => {
 
 const store = new SettingsStore();
 const callback = interaction => {
-    store.set(interaction.guildId, interaction.options._subcommand.toUpperCase().replace("-", "_"), interaction.options._hoistedOptions[0].value);
     let response;
+    const value = interaction.options._hoistedOptions[0].value;
+    store.set(interaction.guildId, interaction.options._subcommand.toUpperCase().replaceAll("-", "_"), value);
     switch (interaction.options._subcommand) {
         case "max-tickets-per-user":
-            response = `The maximum amount of tickets a user can have is now ${interaction.options._hoistedOptions[0].value}`;
+            response = `The maximum amount of tickets a user can have is now ${value}`;
             break;
         case "staff-role":
-            response = `The staff role is now <@&${interaction.options._hoistedOptions[0].value}>`;
+            response = `The staff role is now <@&${value}>`;
             break;
         case "ticket-category":
-            response = `The ticket category is now <#${interaction.options._hoistedOptions[0].value}>`;
+            response = `The ticket category is now <#${value}>`;
             break;
     }
     interaction.reply(response ?? "Something went wrong");

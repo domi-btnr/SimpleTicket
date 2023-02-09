@@ -3,12 +3,13 @@ import fs from "fs";
 class Store {
     constructor() {
         this.name = this.constructor.name.toLowerCase().replace("store", "");
-        if (!fs.existsSync("data.json")) this.data = { settings: {} };
-        else this.data = JSON.parse(fs.readFileSync("data.json"))?.[this.name] ?? { settings: {} };
+        if (!fs.existsSync("data.json")) this.data = {};
+        else this.data = JSON.parse(fs.readFileSync("data.json"))?.[this.name] ?? {};
     }
 
     save() {
-        fs.writeFileSync("data.json", JSON.stringify({ [this.name]: { ...this.data, [this.name]: this.data[this.name] } }, null, 4));
+        const oldData = fs.existsSync("data.json") ? JSON.parse(fs.readFileSync("data.json")) : {};
+        fs.writeFileSync("data.json", JSON.stringify({ ...oldData, [this.name]: this.data }, null, 4));
     }
 }
 
@@ -48,6 +49,54 @@ export class SettingsStore extends Store {
         if (!settings) return;
         delete settings[key];
         this.data[GUILD_ID] = settings;
+        this.save();
+    }
+}
+
+/**
+ * @typedef {string} GUILD_ID
+ * @typedef {string} TICKET_ID
+ * @typedef {{id: string, createdAt: number, user: string}} TICKET
+ * @typedef {TICKET[]} TICKETS
+ */
+export class TicketStore extends Store {
+    /**
+     * @param {GUILD_ID} GUILD_ID
+     * @param {TICKET_ID} key
+     * @returns {TICKET}
+     */
+    getTicket(GUILD_ID, key) {
+        return this.getTickets(GUILD_ID).find(ticket => ticket.id === key);
+    }
+
+    /**
+     * @param {GUILD_ID} GUILD_ID
+     * @returns {TICKETS}
+     */
+    getTickets(GUILD_ID) {
+        return this.data[GUILD_ID] ?? [];
+    }
+
+    /**
+     * @param {GUILD_ID} GUILD_ID
+     * @param {TICKET} ticket
+     * @returns {void}
+     */
+    addTicket(GUILD_ID, ticket) {
+        this.data[GUILD_ID] = [...this.data[GUILD_ID] ?? [], ticket];
+        this.save();
+    }
+
+    /**
+     * @param {GUILD_ID} GUILD_ID
+     * @param {TICKET_ID} key
+     * @returns {void}
+     */
+    delete(GUILD_ID, key) {
+        const tickets = this.data[GUILD_ID];
+        if (!tickets) return;
+        delete tickets[key];
+        this.data[GUILD_ID] = tickets;
         this.save();
     }
 }
